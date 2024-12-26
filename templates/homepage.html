@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tele-Storage Login</title>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffeba7;
+            --background-color: #1f2029;
+            --text-color: #c4c3ca;
+            --accent-dark: #102770;
+            --card-bg: rgba(31, 32, 41, 0.95);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            background-image: url("/static/images/tele.png");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: transparent;
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: var(--transition);
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h4 {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h4 {
+                font-size: 20px; 
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h4 {
+                font-size: 18px; 
+            }
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-style {
+            padding: 13px 20px;
+            padding-left: 55px;
+            height: 48px;
+            width: 100%;
+            font-weight: 500;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: 2.5px;
+            outline: none;
+            color: var(--text-color);
+            background-color: transparent;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .form-style:focus {
+            border-color: #ffeba763;
+            box-shadow: 0 0 1px 2px rgba(255, 235, 167, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 0;
+            left: 18px;
+            height: 48px;
+            font-size: 24px;
+            line-height: 48px;
+            text-align: left;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        #otp-text {
+            position: absolute;
+            top: 0;
+            right: 18px;
+            height: 48px;
+            font-size: 14px;
+            line-height: 48px;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--accent-dark);
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(255, 235, 167, 0.2);
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-dark);
+            color: var(--primary-color);
+            box-shadow: 0 8px 24px rgba(16, 39, 112, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error {
+            animation: shake 0.5s ease-in-out;
+            border-color: #ff3860 !important;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="header">
+                <h4>Welcome To Tele-Storage</h4>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="Login_number" class="form-style" placeholder="+12223334455"
+                    id="Login_number" autocomplete="off">
+                <p id="otp-text" style="display: none;">OTP Sent!</p>
+                <i class="input-icon uil uil-phone"></i>
+            </div>
+            <div class="form-group" id="otp-group-1" style="display: none;">
+                <input type="password" name="Login_otp" class="form-style"
+                    placeholder="OTP Received in Telegram Application" id="Login_otp"
+                    autocomplete="off">
+                <i class="input-icon uil uil-lock-alt"></i>
+            </div>
+            <button class="btn" id="submit-btn">Send-OTP</button>
+        </div>
+    </div>
+
+    <script>
+        var otpResponse;
+        var phone_number;
+        var present_status = false;
+
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            var button = document.getElementById("submit-btn");
+            button.innerHTML = "Login";
+            const number = document.getElementById("Login_number").value;
+            phone_number = number;
+            var jsonData = JSON.stringify({ number });
+            const otp = document.getElementById("Login_otp").value;
+
+            if (otp.trim() === "" && present_status === false) {
+                fetch('/get_otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: jsonData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'absent') {
+                        otpResponse = data['hash'];
+                        document.getElementById('otp-group-1').style.display = 'block';
+                        document.getElementById('otp-text').style.display = 'block';
+                    } else {
+                        present_status = true;
+                    }
+                });
+            } else {
+                var jsonData = JSON.stringify({ phone_number, otp, otpResponse });
+                fetch('/get_id_hash', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: jsonData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Success' && data.session_status === 'False') {
+                        var jsonData = JSON.stringify({ id: data['id'], hash: data['hash'], number: data['number'] });
+                        fetch('/get_session_otp', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: jsonData,
+                        })
+                        .then(response => response.json())
+                        .then(postData => {
+                            localStorage.setItem('sessionData', JSON.stringify(postData));
+                            window.location.href = '/Tele-Strorage-login';
+                        });
+                    } else if (data.message === 'Success' && data.session_status === 'True') {
+                        window.location.href = '/Gallary_Homepage';
+                    } else if (data.message === 'Invalid confirmation code!') {
+                        var otpInput = document.getElementById('Login_otp');
+                        otpInput.classList.add('error');
+                        otpInput.value = '';
+                        otpInput.placeholder = 'Invalid confirmation code!';
+                        setTimeout(function() {
+                            otpInput.placeholder = 'OTP Received in Telegram Application';
+                            otpInput.classList.remove('error');
+                        }, 1000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
