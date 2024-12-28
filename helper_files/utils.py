@@ -1,5 +1,5 @@
 import requests
-
+from bs4 import BeautifulSoup
 
 
 
@@ -66,12 +66,13 @@ class Telegram_Credentials:
 
     def get_id_hash(self):
         res=self.session.get('https://my.telegram.org/apps')
-        soup=BeautifulSoup(res.text,'html.parser')
-        try:
-            id,hash = [i.text.replace('\n','').strip() for i in soup.find_all('span', class_='form-control input-xlarge uneditable-input', onclick=True)]
-            return id,hash
-        except:
-            print("Please Make a Application first By going to this following link:\nhttps://my.telegram.org/")
+        soup = BeautifulSoup(res.text, "html.parser")
+
+        id = [i.text for i in soup.find_all("strong") if (i.text.isdigit() and len(i.text) == 8)][0]
+        hash = [i.text for i in soup.find_all('span') if (len(i.text) == 32 and " " not in i.text)][0]
+
+        return {"id": id, "hash": hash}
+
 
     # def create_app(self):
     #     res=self.session.get('https://my.telegram.org/apps')
