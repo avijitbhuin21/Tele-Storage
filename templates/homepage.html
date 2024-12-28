@@ -204,76 +204,9 @@
     </div>
 
     <script>
-        var otpResponse;
-        var phone_number;
-        var present_status = false;
 
-        document.getElementById('submit-btn').addEventListener('click', function() {
-            var button = document.getElementById("submit-btn");
-            button.innerHTML = "Login";
-            const number = document.getElementById("Login_number").value;
-            phone_number = number;
-            var jsonData = JSON.stringify({ number });
-            const otp = document.getElementById("Login_otp").value;
 
-            if (otp.trim() === "" && present_status === false) {
-                fetch('/get_otp', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: jsonData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'absent') {
-                        otpResponse = data['hash'];
-                        document.getElementById('otp-group-1').style.display = 'block';
-                        document.getElementById('otp-text').style.display = 'block';
-                    } else {
-                        present_status = true;
-                    }
-                });
-            } else {
-                var jsonData = JSON.stringify({ phone_number, otp, otpResponse });
-                fetch('/get_id_hash', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: jsonData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Success' && data.session_status === 'False') {
-                        var jsonData = JSON.stringify({ id: data['id'], hash: data['hash'], number: data['number'] });
-                        fetch('/get_session_otp', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: jsonData,
-                        })
-                        .then(response => response.json())
-                        .then(postData => {
-                            localStorage.setItem('sessionData', JSON.stringify(postData));
-                            window.location.href = '/Tele-Strorage-login';
-                        });
-                    } else if (data.message === 'Success' && data.session_status === 'True') {
-                        window.location.href = '/Gallary_Homepage';
-                    } else if (data.message === 'Invalid confirmation code!') {
-                        var otpInput = document.getElementById('Login_otp');
-                        otpInput.classList.add('error');
-                        otpInput.value = '';
-                        otpInput.placeholder = 'Invalid confirmation code!';
-                        setTimeout(function() {
-                            otpInput.placeholder = 'OTP Received in Telegram Application';
-                            otpInput.classList.remove('error');
-                        }, 1000);
-                    }
-                });
-            }
-        });
+        
     </script>
 </body>
 </html>
