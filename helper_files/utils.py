@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-
+from telethon.sync import TelegramClient
+from telethon.sessions import StringSession
 
 DEBUG = True
 
@@ -36,23 +37,25 @@ class Telegram_Credentials:
 
     
     def get_My_Telegram_org_login_otp(self,number):
+        self.phone_number = number
         url = 'https://my.telegram.org/auth/send_password'
         payload = {
             "phone": number
         }
         res = self.session.post(url=url, headers=self.headers, data=payload)
         try:
-            return res.json()['random_hash']
+            self.login_otp_random_hash = res.json()['random_hash']
+            return self.login_otp_random_hash
         except Exception as e:
             log_debug(e)
             log_debug(res.text)
 
-    def confirm_My_Telegram_org_otp(self, otp, random_hash, phone):
+    def confirm_My_Telegram_org_otp(self, otp):
         url = 'https://my.telegram.org/auth/login'
 
         data = {
-            'phone': phone,
-            'random_hash': random_hash,
+            'phone': self.phone_number,
+            'random_hash': self.login_otp_random_hash,
             'password': otp,
             'remember': '1',
         }
@@ -65,64 +68,59 @@ class Telegram_Credentials:
             return False
 
     def get_id_hash(self):
-        res=self.session.get('https://my.telegram.org/apps')
+        res = self.session.get('https://my.telegram.org/apps')
         soup = BeautifulSoup(res.text, "html.parser")
 
-        id = [i.text for i in soup.find_all("strong") if (i.text.isdigit() and len(i.text) == 8)][0]
-        hash = [i.text for i in soup.find_all('span') if (len(i.text) == 32 and " " not in i.text)][0]
+        id = [i.text for i in soup.find_all("strong") if (i.text.isdigit() and len(i.text) == 8)]
+        hash = [i.text for i in soup.find_all('span') if (len(i.text) == 32 and " " not in i.text)]
 
-        return {"id": id, "hash": hash}
+        if id != [] and hash != []:
+            return {"id": id[0], "hash": hash[0]}
+        else:
+            return False
 
 
-    # def create_app(self):
-    #     res=self.session.get('https://my.telegram.org/apps')
-    #     soup=BeautifulSoup(res.text,'html.parser')
-    #     hash = soup.find('input', {'name': 'hash'})['value']
+    def create_app(self):
+        res = self.session.get('https://my.telegram.org/apps')
+        soup = BeautifulSoup(res.text,'html.parser')
+        hash = soup.find('input', {'name': 'hash'})['value']
+        log_debug(f"HASH FOR CREATING APP: {hash}")
 
-    #     url='https://my.telegram.org/apps/create'
-    #     payload = {
-    #         'hash': hash,
-    #         'app_title': 'Telegram_Unlimited_storage',
-    #         'app_shortname': 'TeleDrive',
-    #         'app_url': 'www.telegram.org',
-    #         'app_platform': 'android',
-    #         'app_desc': ''
-    #     }
-    #     res=self.session.post(url=url, headers=self.headers, data=payload)
-    #     print(res.text)
-    #     return self.get_id_hash()
+        url = 'https://my.telegram.org/apps/create'
+        payload = {
+            'hash': hash,
+            'app_title': 'TeleStorage',
+            'app_shortname': 'TeleStorage',
+            'app_url': 'www.telegram.org',
+            'app_platform': 'android',
+            'app_desc': ''
+        }
+        res=self.session.post(url=url, headers=self.headers, data=payload)
+        log_debug(res.text)
+
+        return True if res.status_code == 200 else False
+
+    def handle_extraction(self):
+        data = self.get_id_hash()
+        if data != False:
+            return data
+        else:
+            log_debug(f"App Not Found, Creating one")
+            if self.create_app() == True:
+                return self.get_id_hash()
+            else:
+                log_debug("Error While Creating the app. Please Go to https://my.telegram.org/apps and create the app manually.") 
+
+
+class Telegram_Session_Handler:
+
+    def __init__(self):
+        pass
+
+    def create_session_client(self, API_ID, API_HASH, SESSION_STRING = None):
+        self.client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
+
+        return self.client
 
     
-        
 
-
-
-    # def telegram_login(self, phone, random_hash, otp):
-    #     url = 'https://my.telegram.org/auth/login'
-
-    #     data = {
-    #         'phone': phone,
-    #         'random_hash': random_hash,
-    #         'password': otp,
-    #         'remember': '1',
-    #     }
-    #     res = self.session.post('https://my.telegram.org/auth/login', headers = self.headers, data = data)
-
-    #     no=number.replace('+','')
-    #     if 'Invalid confirmation code!' not in res.text:
-    #         try:
-    #             id,hash= self.get_id_hash()
-    #             data={"id":id, "hash":hash, "number":number}
-    #             with open(f"{no}.json", "w") as json_file:
-    #                 json.dump(data, json_file)
-    #             return {"id":id, "hash":hash, "number":number, "message":"Success"}
-                
-    #         except:
-    #             id,hash=self.create_app()
-    #             data={"id":id, "hash":hash, "number":number}
-    #             with open(f"{no}.json", "w") as json_file:
-    #                 json.dump(data, json_file)
-    #             return {"id":id, "hash":hash, "number":number, "message":"Success"}
-
-    #     else:
-    #         return {"message":'Invalid confirmation code!'}

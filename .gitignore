@@ -1,4 +1,5 @@
 .venv
 .env
-trial.ipynb
 backup.txt
+demo_details.json
+trial.ipynb

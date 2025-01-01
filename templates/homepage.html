@@ -6,6 +6,7 @@
     <title>Tele-Storage Login</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="static/images/tele.png">
     <style>
         :root {
             --primary-color: #ffeba7;
@@ -174,12 +175,54 @@
             border-color: #ff3860 !important;
         }
 
+        #custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #3a3b45;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            width: 90%;
+            max-width: 400px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+       #custom-popup.show {
+            opacity: 1;
+            display: block;
+        }
+
+        #custom-popup.hide {
+            opacity: 0;
+        }
+
+        #close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #ffeba7;
+            font-size: 24px;
+        }
+
+        #popup-message {
+            color: #ffeba7;
+            margin-top: 10px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
         @media (max-width: 480px) {
             .login-card {
                 padding: 30px 20px;
             }
         }
-    </style>
+</style>
 </head>
 <body>
     <div class="container">
@@ -201,12 +244,91 @@
             </div>
             <button class="btn" id="submit-btn">Send-OTP</button>
         </div>
+        <div id="custom-popup">
+            <span id="close-popup">&times;</span>
+            <p id="popup-message"></p>
+        </div>
     </div>
 
     <script>
+        function checkCookies() {
+            const clientIdCookie = document.cookie.split(';').find(c => c.trim().startsWith('client_id='));
+            const clientHashCookie = document.cookie.split(';').find(c => c.trim().startsWith('client_hash='));
+            return !!clientIdCookie && !!clientHashCookie;
+        }
 
+        function saveCookies(clientId, clientHash) {
+            const expires = new Date();
+            expires.setDate(expires.getDate() + 7);
+            document.cookie = `client_id=${clientId}; expires=${expires.toUTCString()}; path=/`;
+            document.cookie = `client_hash=${clientHash}; expires=${expires.toUTCString()}; path=/`;
+        }
 
-        
+        function getAllCookies() {
+            const cookies = document.cookie.split(';');
+            const cookieObj = {};
+            cookies.forEach(c => {
+                const [name, value] = c.trim().split('=');
+                cookieObj[name] = value;
+            });
+            return cookieObj;
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', function () {
+            const cookiesPresent = checkCookies();
+            const cookieData = getAllCookies();
+            const phoneNumber = document.getElementById('Login_number').value;
+
+            const requestData = {
+                number: phoneNumber,
+                id: cookiesPresent ? cookieData.client_id : null,
+                hash: cookiesPresent ? cookieData.client_hash : null
+            };
+
+            console.log(requestData);
+
+            fetch('/get_login_otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'not found') {
+                    console.log(data);
+                    const popup = document.getElementById('custom-popup');
+                    const message = document.getElementById('popup-message');
+                    
+                    message.innerHTML = 'Telegram App not found.<br>Please create a Telegram app by following these steps:<br><br>' +
+                        '1. Go to my.telegram.org<br>' +
+                        '2. Login with your Telegram account<br>' +
+                        '3.The go to my.telegram.org/apps<br>' +
+                        '4. Create a new application<br>' +
+                        '5. close the tab and try logging in again using the same phone number';
+                    
+                    popup.style.display = 'block';
+                    // Force reflow
+                    void popup.offsetHeight;
+                    popup.classList.add('show');
+                } else {
+                    console.log('OTP:', data.otp);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('close-popup').addEventListener('click', function() {
+            const popup = document.getElementById('custom-popup');
+            popup.classList.remove('show');
+            popup.addEventListener('transitionend', function handler() {
+                popup.style.display = 'none';
+                popup.removeEventListener('transitionend', handler);
+            });
+        });
     </script>
 </body>
 </html>
