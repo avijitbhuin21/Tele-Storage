@@ -126,7 +126,7 @@ a:focus-visible {
 	font-size: 12px;
 	color: #e3b774;
 	padding: var(--page-padding);
-	display: grid;
+	display: block;
 	z-index: 1000;
 	grid-row-gap: 1rem;
 	grid-column-gap: 2rem;
@@ -189,7 +189,7 @@ a:focus-visible {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: url(../img/noise.png), radial-gradient(circle, #f9a13275 0%, transparent 100%);
+	background: url(../images/noise.png), radial-gradient(circle, #f9a13275 0%, transparent 100%);
   background-size: 250px, 100%;
   pointer-events: none;
 }
@@ -260,7 +260,7 @@ a:focus-visible {
 	font-family: "new-science", -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
 	font-weight: 700;
 	font-size: 1.15rem;
-	background: url(../img/noise.png), radial-gradient(circle, #f9a13275 0%, transparent 100%);
+	background: url(../images/noise.png), radial-gradient(circle, #f9a13275 0%, transparent 100%);
 	background-size: 250px, 100%;
 	transition: all 0.3s;
 	cursor: pointer;
@@ -312,7 +312,7 @@ a:focus-visible {
 	top: 0;
 	left: 0;
 	z-index: 0;
-	background: url(../img/noise.png), radial-gradient(at top, #f9a132 0%, #ddd 100%);
+	background: url(../images/noise.png), radial-gradient(at top, #f9a132 0%, #ddd 100%);
   background-size: 250px, 100%;
 }
 
@@ -379,5 +379,156 @@ a:focus-visible {
 	}
 	.content__text p.highlight {
 		font-size: clamp(2rem,7vh,4rem);
+	}
+}
+
+.form-container {
+	background: transparent;
+    padding-top: 13%;
+    border-radius: 8px;
+    z-index: 1000;
+    position: relative;
+    scale: 1.3;
+    padding-left: 40%;
+    padding-right: 3%;
+}
+
+.phone-input, .otp-input, .submit-btn {
+	pointer-events: auto;
+}
+
+.input-group {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+    flex-direction: column;
+}
+
+.phone-input, .otp-input {
+	padding: 10px;
+	font-size: 15px;
+	border: 1px solid #e3b774;
+	border-radius: 25px;
+	width: 200px;
+	transition: border-color 0.3s ease;
+	background-color: transparent;
+	color: white;
+	font-family: new-science, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;;
+}
+
+.phone-input:focus, .otp-input:focus {
+	outline: none;
+	border-color: #966720;
+	background-color: transparent;
+	pointer-events: auto;
+}
+
+.phone-input::placeholder, .otp-input::placeholder {
+	color: white;
+	opacity: 0.8;
+}
+
+.submit-btn {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: transparent;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	position: relative;
+	width: 40px;
+	overflow: hidden;
+}
+
+.submit-btn:disabled {
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+.arrow {
+	display: inline-block;
+	color: #e3b774;
+	font-size: 20px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: opacity 0.3s ease, right 0.3s ease;
+}
+
+.arrow-default {
+	right: 10px;
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.arrow-hover {
+	right: -40px;
+	opacity: 0;
+	pointer-events: auto;
+}
+
+.submit-btn:not(:disabled):hover .arrow-default {
+	opacity: 0;
+}
+
+.submit-btn:not(:disabled):hover .arrow-hover {
+	right: 10px;
+	opacity: 1;
+}
+
+.error-message {
+	color: #ff4444;
+	font-size: 14px;
+	margin-top: 5px;
+	display: none;
+}
+
+/* Override Chrome's autofill background color */
+.phone-input:-webkit-autofill,
+.phone-input:-webkit-autofill:hover,
+.phone-input:-webkit-autofill:focus,
+.phone-input:-webkit-autofill:active {
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: white;
+	background-color: transparent !important;
+	transition: background-color 5000s ease-in-out 0s; /* Prevent Chrome from reapplying the background */
+}
+
+/* Apply the same styles to the OTP input if needed */
+.otp-input:-webkit-autofill,
+.otp-input:-webkit-autofill:hover,
+.otp-input:-webkit-autofill:focus,
+.otp-input:-webkit-autofill:active {
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: white;
+	background-color: transparent !important;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+.github-logo {
+	position: fixed; /* Fixed position to keep it in the corner */
+	top: 20px; /* Adjust the distance from the top */
+	right: 20px; /* Adjust the distance from the right */
+	font-size: 24px; /* Size of the icon */
+	color: #e3b774; /* Match the color scheme */
+	text-decoration: none; /* Remove underline */
+	z-index: 1001; /* Ensure it's above other elements */
+	transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.github-logo:hover {
+	color: #966720; /* Change color on hover */
+}
+
+@media (max-width: 767px) {
+	.form-container {
+		padding-top: 51%; /* Adjust padding for mobile */
+		scale: 1.3; /* Scale the container */
+		padding-left: 13%; /* Add left padding */
+		padding-right: 3%; /* Add right padding */
+	}
+
+	.menu-container {
+		padding-left: 38vw;
 	}
 }

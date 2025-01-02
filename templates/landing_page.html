@@ -4,25 +4,132 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Tele-Storage</title>
-		<link rel="shortcut icon" href="templates/favicon.ico">
+		<link rel="shortcut icon" href="static/images/tele.png">
 		<link rel="stylesheet" href="https://use.typekit.net/ydc6mft.css">
 		<link rel="stylesheet" type="text/css" href="static/css/base.css" />
 		<script>document.documentElement.className="js";</script>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+		<style>
+			.menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    position: relative;
+    padding-left: 47%;
+}
+
+.menu-container a {
+    color: #e3b774;
+    text-decoration: none; /* Remove default underline */
+    font-size: 1.2rem; /* Adjust font size */
+    padding: 0.75rem 1.5rem; /* Add padding for better click area */
+    transition: all 0.4s ease; /* Smooth transition for hover effects */
+    border-radius: 30px; /* Rounded corners for a modern look */
+    position: relative;
+    overflow: hidden; /* Ensures the pseudo-element doesn't overflow */
+    background: transparent;
+    border: 2px solid #e3b774; /* Add a border for a sleek outline */
+}
+
+.menu-container a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%; 
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(227, 183, 116, 0.3), transparent); /* Gradient effect */
+    transition: left 0.6s ease;
+}
+
+.menu-container a:hover {
+    color: #fff; 
+    background-color: #e3b774; 
+    box-shadow: 0 4px 15px rgba(227, 183, 116, 0.5); 
+    transform: scale(1.05); 
+}
+
+.menu-container a:hover::before {
+    left: 100%;
+}
+
+@media (max-width: 767px) {
+	.menu-container {
+		padding-left: 31%;
+	}
+}
+			
+		</style>
 	</head>
 	<body class="noscroll loading">
 		<main>
 			<header class="frame hidden">
 				<h1 class="frame__title"><strong>Tele</strong>-Storage&reg;</h1>
-				<p> <br>Hii</p>
+				<!-- GitHub Logo -->
+				<a href="https://github.com/avijitbhuin21/Tele-Storage" class="github-logo" target="_blank" aria-label="GitHub Repository">
+					<i class="fab fa-github"></i>
+				</a>
+				<!-- GitHub Logo -->
+
+				<!-- loginform -->
+				<div class="form-container" >
+					<div class="input-group" style="display: none;">
+						<p>Login: </p> 
+						<input 
+							type="tel" 
+							id="phoneInput" 
+							class="phone-input" 
+							placeholder="+1 (234) 567-8900"
+							oninput="validatePhone(this.value)"
+						>
+						<input 
+							type="text" 
+							id="otpInput" 
+							class="otp-input" 
+							placeholder="Otp received in Telegram"
+							style="display: none;"
+						>
+						<button 
+							id="submitBtn" 
+							class="submit-btn" 
+							disabled 
+							onclick="handleSubmit()"
+						>
+							<span class="arrow arrow-default">→</span>
+							<span class="arrow arrow-hover">→</span>
+						</button>
+					</div>
+					<div id="errorMessage" class="error-message">
+						Please enter a valid international phone number
+					</div>
+				</div>
+				<!-- loginform -->
+
+				<!-- Menu -->
+				<div class="menu-container">
+					<a href="https://github.com/avijitbhuin21/Tele-Storage" class="gallery-btn" aria-label="gallery view">
+						Gallery
+					</a>
+
+					<a href="https://github.com/avijitbhuin21/Tele-Storage" class="file-btn" aria-label="File view">
+						File Manager
+					</a>
+
+					<a href="https://github.com/avijitbhuin21/Tele-Storage" class="upload-btn" aria-label="upload">
+						Upload Files
+					</a>
+				</div>
+				<!-- Menu -->
+
 			</header>
 			<section class="intro">
 				<div class="grid">
 					<div class="row">
 						<div class="row__item">
 							<div class="row__item-inner">
-								<div class="row__item-img" style="background-image:url(static/images/1.jpg)"></div>
+								<div class="row__item-img" style="background-image:url(https://picsum.photos/1920/1080?random=35)"></div>
 							</div>
 						</div>
 						<div class="row__item"><div class="row__item-inner"><div class="row__item-img" style="background-image:url(https://picsum.photos/1920/1080?random=1)"></div></div></div>
@@ -75,7 +182,7 @@
 			<section class="content">
 				<nav class="content__nav">
 					<a class="content__nav-item" href="" target="_blank">Instructions &rarr;</a>
-					<a class="content__nav-item" href="https://github.com/avijitbhuin21/Tele-Storage" target="_blank">GitHub</a>
+					<!-- <a class="content__nav-item" href="https://github.com/avijitbhuin21/Tele-Storage" target="_blank">GitHub</a> -->
 					<div class="tags">
 						<a href="" target="_blank">API docs</a>
 					</div>
@@ -98,5 +205,24 @@
 		<script src="static/js/landing_page/smoothscroll.js"></script>
 		<script src="static/js/landing_page/imagesloaded.pkgd.min.js"></script>
 		<script type="module" src="static/js/landing_page/index.js"></script>
+		<script>
+			function validatePhone(value) {
+				const phoneRegex = /^\+[1-9]\d{1,14}$/;
+				const cleanNumber = value.replace(/\s+/g, '');
+				const isValid = phoneRegex.test(cleanNumber);
+				
+				const submitBtn = document.getElementById('submitBtn');
+				const errorMessage = document.getElementById('errorMessage');
+				
+				submitBtn.disabled = !isValid;
+				errorMessage.style.display = value && !isValid ? 'block' : 'none';
+			}
+	
+			function handleSubmit() {
+				const phoneNumber = document.getElementById('phoneInput').value;
+				console.log('Submitted phone number:', phoneNumber);
+				// Add your submit logic here
+			}
+		</script>
 	</body>
 </html>
