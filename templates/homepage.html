@@ -3,332 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tele-Storage Login</title>
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="static/images/tele.png">
+    <title>TELE-STORAGE - Your Personal Cloud on Telegram</title>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #ffeba7;
-            --background-color: #1f2029;
-            --text-color: #c4c3ca;
-            --accent-dark: #102770;
-            --card-bg: rgba(31, 32, 41, 0.95);
-            --transition: all 0.3s ease;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
+        :root {
+            --primary-bg: #000000; /* Black background */
+            --text-primary: #ffffff; /* White text */
+            --text-secondary: #b0b0b0; /* Grey text */
+            --card-bg: rgba(255, 255, 255, 0.05); /* Semi-transparent white for cards */
+            --blur-amount: 12px;
+            --accent-color: #ffffff; /* White for accents */
+            --border-color: rgba(255, 255, 255, 0.1); /* Subtle border color */
+        }
         body {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            font-size: 15px;
-            line-height: 1.7;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            background-image: url("/static/images/tele.png");
-            background-size: cover;
-            background-position: center;
-            min-height: 100vh;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
             overflow-x: hidden;
-            background-attachment: fixed;
+            position: relative;
         }
-
+        .wave-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(45deg, #0a0a0a, #000000);
+        }
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+            animation: wave 15s infinite linear;
+        }
+        .wave:nth-child(2) {
+            animation-duration: 17s;
+            opacity: 0.5;
+        }
+        .wave:nth-child(3) {
+            animation-duration: 19s;
+            opacity: 0.3;
+        }
+        @keyframes wave {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .paper-plane {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 1;
+            animation: fly linear infinite;
+        }
+        .paper-plane svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--accent-color);
+        }
+        @keyframes fly {
+            to { transform: translate(100vw, -100vh); }
+        }
         .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+        header {
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(var(--blur-amount));
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo::before {
+            content: "📦";
+            font-size: 1.8rem;
+        }
+        .github-icon {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            transition: 0.3s ease;
+        }
+        .github-icon:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+        .hero {
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
         }
-
-        .login-card {
-            background: transparent;
-            padding: 40px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 440px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: translateY(0);
-            transition: var(--transition);
-        }
-
-        .login-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .header {
+        .hero-content {
             text-align: center;
-            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin: 1rem;
         }
-
-        .header h4 {
-            color: var(--primary-color);
-            font-size: 24px;
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .hero-content p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
             font-weight: 600;
-            margin-bottom: 10px;
+            transition: 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-
-        @media (max-width: 768px) {
-            .header h4 {
-                font-size: 20px; 
-            }
+        .primary-button {
+            background-color: var(--accent-color);
+            color: #000000;
         }
-
-        @media (max-width: 480px) {
-            .header h4 {
-                font-size: 18px; 
-            }
+        .primary-button:hover {
+            background-color: #e0e0e0;
         }
-
-        .form-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .form-style {
-            padding: 13px 20px;
-            padding-left: 55px;
-            height: 48px;
-            width: 100%;
-            font-weight: 500;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 22px;
-            letter-spacing: 2.5px;
-            outline: none;
-            color: var(--text-color);
+        .secondary-button {
             background-color: transparent;
-            border: 1px solid transparent;
-            transition: var(--transition);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
         }
-
-        .form-style:focus {
-            border-color: #ffeba763;
-            box-shadow: 0 0 1px 2px rgba(255, 235, 167, 0.1);
+        .secondary-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
-
-        .input-icon {
-            position: absolute;
-            top: 0;
-            left: 18px;
-            height: 48px;
-            font-size: 24px;
-            line-height: 48px;
-            text-align: left;
-            color: var(--primary-color);
-            transition: var(--transition);
+        .features {
+            padding: 4rem 0;
+            position: relative;
+            z-index: 2;
         }
-
-        #otp-text {
-            position: absolute;
-            top: 0;
-            right: 18px;
-            height: 48px;
-            font-size: 14px;
-            line-height: 48px;
-            color: var(--primary-color);
-            transition: var(--transition);
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: var(--accent-dark);
-            padding: 15px 30px;
-            border-radius: 12px;
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(255, 235, 167, 0.2);
-            transition: var(--transition);
-        }
-
-        .btn:hover {
-            background-color: var(--accent-dark);
-            color: var(--primary-color);
-            box-shadow: 0 8px 24px rgba(16, 39, 112, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .error {
-            animation: shake 0.5s ease-in-out;
-            border-color: #ff3860 !important;
-        }
-
-        #custom-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #3a3b45;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-            z-index: 10000;
-            width: 90%;
-            max-width: 400px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-       #custom-popup.show {
-            opacity: 1;
-            display: block;
-        }
-
-        #custom-popup.hide {
-            opacity: 0;
-        }
-
-        #close-popup {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            color: #ffeba7;
-            font-size: 24px;
-        }
-
-        #popup-message {
-            color: #ffeba7;
-            margin-top: 10px;
+        .features h2 {
             text-align: center;
-            line-height: 1.6;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
         }
-
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 30px 20px;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            padding: 1.5rem;
+            border-radius: 16px;
+            transition: 0.4s ease;
+            border: 1px solid var(--border-color);
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .hero-content p {
+                font-size: 0.9rem;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
-</style>
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.75rem;
+            }
+            .hero-content p {
+                font-size: 0.8rem;
+            }
+            .feature-card {
+                padding: 1rem;
+            }
+            .feature-icon {
+                font-size: 1.5rem;
+            }
+            .feature-card h3 {
+                font-size: 1.1rem;
+            }
+            .feature-card p {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-card">
-            <div class="header">
-                <h4>Welcome To Tele-Storage</h4>
-            </div>
-            <div class="form-group">
-                <input type="tel" name="Login_number" class="form-style" placeholder="+12223334455"
-                    id="Login_number" autocomplete="off">
-                <p id="otp-text" style="display: none;">OTP Sent!</p>
-                <i class="input-icon uil uil-phone"></i>
-            </div>
-            <div class="form-group" id="otp-group-1" style="display: none;">
-                <input type="password" name="Login_otp" class="form-style"
-                    placeholder="OTP Received in Telegram App" id="Login_otp"
-                    autocomplete="off">
-                <i class="input-icon uil uil-lock-alt"></i>
-            </div>
-            <button class="btn" id="submit-btn">Send-OTP</button>
-        </div>
-        <div id="custom-popup">
-            <span id="close-popup">&times;</span>
-            <p id="popup-message"></p>
-        </div>
+    <div class="wave-background">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
     </div>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">TELE-STORAGE</div>
+                <a href="https://github.com/avijitbhuin21/Tele-Storage" target="_blank" class="github-icon">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+    <main>
+       <section class="hero">
+           <div class="container">
+               <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                   <h1>Transform Your Telegram Into A Personal Cloud Storage</h1>
+                   <p>Store, organize, and access your data through Telegram with our powerful service. Use our intuitive gallery view or integrate directly with our API for seamless data management.</p>
+                   <div class="cta-buttons">
+                       <a href="#" class="button primary-button" data-aos="fade-up" data-aos-delay="200">Get Started</a>
+                       <a href="#" class="button secondary-button" data-aos="fade-up" data-aos-delay="400">View API Docs</a>
+                   </div>
+               </div>
+           </div>
+       </section>
+       <section class="features">
+           <div class="container">
+               <h2>Features</h2>
+               <div class="features-grid">
+                   <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                       <div class="feature-icon">🖼️</div>
+                       <h3>Gallery View</h3>
+                       <p>Browse your stored files with our beautiful gallery interface. Organize and access your content effortlessly.</p>
+                   </div>
+                   <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                       <div class="feature-icon">⚡</div>
+                       <h3>API Integration</h3>
+                       <p>Seamlessly integrate with our API to programmatically store and retrieve data directly from Telegram.</p>
+                   </div>
+                   <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                       <div class="feature-icon">🔒</div>
+                       <h3>Secure Storage</h3>
+                       <p>Your data remains in your own Telegram account, ensuring complete privacy and control over your files.</p>
+                   </div>
+                   <div class="feature-card" data-aos="fade-up" data-aos-delay="800">
+                       <div class="feature-icon">📂</div>
+                       <h3>Open Source</h3>
+                       <p>TELE-STORAGE is an open-source project, allowing you to contribute and customize it to your needs.</p>
+                   </div>
+               </div>
+           </div>
+       </section>
+   </main>
 
-    <script>
-        function checkCookies() {
-            const clientIdCookie = document.cookie.split(';').find(c => c.trim().startsWith('client_id='));
-            const clientHashCookie = document.cookie.split(';').find(c => c.trim().startsWith('client_hash='));
-            return !!clientIdCookie && !!clientHashCookie;
+   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+   <script>
+       AOS.init({ duration: 800, once: true, offset: 100, easing: 'ease-out-cubic' });
+
+       function createPaperPlane() {
+            const plane = document.createElement('div');
+            plane.className = 'paper-plane';
+            plane.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M511.6 36.86l-64 415.1c-1.5 9.734-7.375 18.22-15.97 23.05c-4.844 2.719-10.27 4.097-15.68 4.097c-4.188 0-8.319-.8154-12.29-2.472l-122.6-51.1l-50.86 76.29C226.3 508.5 219.8 512 212.8 512C201.3 512 192 502.7 192 491.2v-96.18c0-7.115 2.372-14.03 6.742-19.64L416 96l-293.7 264.3L19.69 317.5C8.438 312.8 .8125 302.2 .0625 289.1s5.469-23.72 16.06-29.77l448-255.1c10.69-6.109 23.88-5.547 34 1.406S513.5 24.72 511.6 36.86z"/>
+                </svg>
+            `;
+            document.body.appendChild(plane);
+        
+            const startX = Math.random() * window.innerWidth * 0.8;
+            const startY = Math.random() * window.innerHeight * 0.8 + window.innerHeight * 0.1;
+            plane.style.left = `${startX}px`;
+            plane.style.top = `${startY}px`;
+        
+            const duration = Math.random() * 20 + 10; // Increased duration for slower movement
+            plane.style.animationDuration = `${duration}s`;
+        
+            plane.addEventListener('animationend', () => {
+                plane.remove();
+            });
         }
 
-        function saveCookies(clientId, clientHash) {
-            const expires = new Date();
-            expires.setDate(expires.getDate() + 7);
-            document.cookie = `client_id=${clientId}; expires=${expires.toUTCString()}; path=/`;
-            document.cookie = `client_hash=${clientHash}; expires=${expires.toUTCString()}; path=/`;
-        }
+       function spawnPaperPlanes() {
+           const maxPlanes = 8;
+           const interval = Math.random() * 3000 + 1000;
 
-        function getAllCookies() {
-            const cookies = document.cookie.split(';');
-            const cookieObj = {};
-            cookies.forEach(c => {
-                const [name, value] = c.trim().split('=');
-                cookieObj[name] = value;
-            });
-            return cookieObj;
-        }
+           if (document.querySelectorAll('.paper-plane').length < maxPlanes) {
+               createPaperPlane();
+           }
 
-        document.getElementById('submit-btn').addEventListener('click', function () {
-            const cookiesPresent = checkCookies();
-            const cookieData = getAllCookies();
-            const phoneNumber = document.getElementById('Login_number').value;
+           setTimeout(spawnPaperPlanes, interval);
+       }
 
-            const requestData = {
-                number: phoneNumber,
-                id: cookiesPresent ? cookieData.client_id : null,
-                hash: cookiesPresent ? cookieData.client_hash : null
-            };
-
-            console.log(requestData);
-
-            fetch('/get_login_otp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'not found') {
-                    console.log(data);
-                    const popup = document.getElementById('custom-popup');
-                    const message = document.getElementById('popup-message');
-                    
-                    message.innerHTML = 'Telegram App not found.<br>Please create a Telegram app by following these steps:<br><br>' +
-                        '1. Go to my.telegram.org<br>' +
-                        '2. Login with your Telegram account<br>' +
-                        '3.The go to my.telegram.org/apps<br>' +
-                        '4. Create a new application<br>' +
-                        '5. close the tab and try logging in again using the same phone number';
-                    
-                    popup.style.display = 'block';
-                    // Force reflow
-                    void popup.offsetHeight;
-                    popup.classList.add('show');
-                } else {
-                    console.log('OTP:', data.otp);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        document.getElementById('close-popup').addEventListener('click', function() {
-            const popup = document.getElementById('custom-popup');
-            popup.classList.remove('show');
-            popup.addEventListener('transitionend', function handler() {
-                popup.style.display = 'none';
-                popup.removeEventListener('transitionend', handler);
-            });
-        });
-    </script>
+       spawnPaperPlanes();
+   </script>
 </body>
 </html>

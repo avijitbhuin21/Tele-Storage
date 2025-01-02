@@ -8,13 +8,13 @@ session_agent = Telegram_Session_Handler()
 
 @app.route("/")
 def home():
-    return render_template("homepage.html")
+    return render_template("landing_page.html")
 
 @app.route("/get_login_otp", methods=["POST"])
 def get_login_otp():
     data = request.get_json()
     print("Received data:", data)
-    return jsonify({"status": "not found"})
+    return jsonify({"status": "success"})
 
 if __name__ == "__main__":
     app.run(debug=True)

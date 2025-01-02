@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tele-Storage Login</title>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="static/images/tele.png">
+    <style>
+        :root {
+            --primary-color: #ffeba7;
+            --background-color: #1f2029;
+            --text-color: #c4c3ca;
+            --accent-dark: #102770;
+            --card-bg: rgba(31, 32, 41, 0.95);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            background-image: url("/static/images/tele.png");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: transparent;
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: var(--transition);
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h4 {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h4 {
+                font-size: 20px; 
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h4 {
+                font-size: 18px; 
+            }
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-style {
+            padding: 13px 20px;
+            padding-left: 55px;
+            height: 48px;
+            width: 100%;
+            font-weight: 500;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: 2.5px;
+            outline: none;
+            color: var(--text-color);
+            background-color: transparent;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .form-style:focus {
+            border-color: #ffeba763;
+            box-shadow: 0 0 1px 2px rgba(255, 235, 167, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 0;
+            left: 18px;
+            height: 48px;
+            font-size: 24px;
+            line-height: 48px;
+            text-align: left;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        #otp-text {
+            position: absolute;
+            top: 0;
+            right: 18px;
+            height: 48px;
+            font-size: 14px;
+            line-height: 48px;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--accent-dark);
+            padding: 15px 30px;
+            border-radius: 12px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(255, 235, 167, 0.2);
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-dark);
+            color: var(--primary-color);
+            box-shadow: 0 8px 24px rgba(16, 39, 112, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error {
+            animation: shake 0.5s ease-in-out;
+            border-color: #ff3860 !important;
+        }
+
+        #custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #3a3b45;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            width: 90%;
+            max-width: 400px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+       #custom-popup.show {
+            opacity: 1;
+            display: block;
+        }
+
+        #custom-popup.hide {
+            opacity: 0;
+        }
+
+        #close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #ffeba7;
+            font-size: 24px;
+        }
+
+        #popup-message {
+            color: #ffeba7;
+            margin-top: 10px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="header">
+                <h4>Welcome To Tele-Storage</h4>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="Login_number" class="form-style" placeholder="+12223334455"
+                    id="Login_number" autocomplete="off">
+                <p id="otp-text" style="display: none;">OTP Sent!</p>
+                <i class="input-icon uil uil-phone"></i>
+            </div>
+            <div class="form-group" id="otp-group-1" style="display: none;">
+                <input type="password" name="Login_otp" class="form-style"
+                    placeholder="OTP Received in Telegram App" id="Login_otp"
+                    autocomplete="off">
+                <i class="input-icon uil uil-lock-alt"></i>
+            </div>
+            <button class="btn" id="submit-btn">Send-OTP</button>
+        </div>
+        <div id="custom-popup">
+            <span id="close-popup">&times;</span>
+            <p id="popup-message"></p>
+        </div>
+    </div>
+
+    <script>
+        function checkCookies() {
+            const clientIdCookie = document.cookie.split(';').find(c => c.trim().startsWith('client_id='));
+            const clientHashCookie = document.cookie.split(';').find(c => c.trim().startsWith('client_hash='));
+            const clientSessionString = document.cookie.split(';').find(c => c.trim().startsWith('session_string='));
+            return !!clientIdCookie && !!clientHashCookie && !!clientSessionString;
+        }
+
+        function saveCookies(clientId, clientHash) {
+            const expires = new Date();
+            expires.setDate(expires.getDate() + 7);
+            document.cookie = `client_id=${clientId}; expires=${expires.toUTCString()}; path=/`;
+            document.cookie = `client_hash=${clientHash}; expires=${expires.toUTCString()}; path=/`;
+        }
+
+        function getAllCookies() {
+            const cookies = document.cookie.split(';');
+            const cookieObj = {};
+            cookies.forEach(c => {
+                const [name, value] = c.trim().split('=');
+                cookieObj[name] = value;
+            });
+            return cookieObj;
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', function () {
+            const cookiesPresent = checkCookies();
+            const cookieData = getAllCookies();
+            const phoneNumber = document.getElementById('Login_number').value;
+
+            const requestData = {
+                number: phoneNumber,
+                id: cookiesPresent ? cookieData.client_id : null,
+                hash: cookiesPresent ? cookieData.client_hash : null
+            };
+
+            console.log(requestData);
+
+            fetch('/get_login_otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'not found') {
+                    console.log(data);
+                    const popup = document.getElementById('custom-popup');
+                    const message = document.getElementById('popup-message');
+                    
+                    message.innerHTML = 'Telegram App not found.<br>Please create a Telegram app by following these steps:<br><br>' +
+                        '1. Go to my.telegram.org<br>' +
+                        '2. Login with your Telegram account<br>' +
+                        '3.The go to my.telegram.org/apps<br>' +
+                        '4. Create a new application<br>' +
+                        '5. close the tab and try logging in again using the same phone number';
+                    
+                    popup.style.display = 'block';
+                    // Force reflow
+                    void popup.offsetHeight;
+                    popup.classList.add('show');
+                } else {
+                    document.getElementById('otp-group-1').style.display = 'block';
+                    
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('close-popup').addEventListener('click', function() {
+            const popup = document.getElementById('custom-popup');
+            popup.classList.remove('show');
+            popup.addEventListener('transitionend', function handler() {
+                popup.style.display = 'none';
+                popup.removeEventListener('transitionend', handler);
+            });
+        });
+    </script>
+</body>
+</html>
